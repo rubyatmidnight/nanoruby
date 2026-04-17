@@ -83,3 +83,6 @@ utils/*
 docs/*
 other_utils/*
 other_utils
+
+videomodels.md
+examplemodelapi.json
