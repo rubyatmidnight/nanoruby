@@ -1,0 +1,1563 @@
+[
+{
+  "schema_version": "media-integration-spec/v2",
+  "generated_at": "2026-04-17T04:19:57.710Z",
+  "media_mode": "video",
+  "endpoint": {
+    "method": "POST",
+    "path": "/api/generate-video",
+    "absolute_url": "https://nano-gpt.com/api/generate-video"
+  },
+  "authentication": {
+    "header": "x-api-key"
+  },
+  "request_transport": {
+    "content_type": "application/json"
+  },
+  "request_example": {
+    "headers": {
+      "Content-Type": "application/json",
+      "x-api-key": "YOUR_API_KEY"
+    },
+    "body": {
+      "prompt": "",
+      "model": "bytedance-seedance-v1.5-pro-fast",
+      "showExplicitContent": false,
+      "wan27_has_video_input": false,
+      "wan27_has_reference_images": false,
+      "voice": "af_bella",
+      "resolution": "720p",
+      "duration": "5",
+      "aspect_ratio": "16:9",
+      "generateAudio": true,
+      "camera_fixed": false
+    }
+  },
+  "request_rules": [
+    "Send JSON to the video generation endpoint using the example body below.",
+    "Pricing is based on normalized settings from the server-side pricing helper, not only on raw request fields."
+  ],
+  "model": {
+    "id": "bytedance-seedance-v1.5-pro-fast",
+    "name": "Seedance 1.5 Pro Fast",
+    "media_type": "video",
+    "provider": "doubao",
+    "description": "Fast Seedance 1.5 Pro variant with cinematic motion and prompt adherence. Supports both text-to-video and image-to-video.",
+    "capabilities": {
+      "supports_image_to_video": true,
+      "supports_reference_to_video": false,
+      "supports_last_image": false,
+      "supports_optional_video_input": false,
+      "supports_fps": false,
+      "nsfw": true
+    }
+  },
+  "supported_parameters": {
+    "parameters": {
+      "resolution": {
+        "type": "select",
+        "label": "Resolution",
+        "default": "720p",
+        "options": [
+          {
+            "value": "720p",
+            "label": "720p"
+          },
+          {
+            "value": "1080p",
+            "label": "1080p"
+          }
+        ],
+        "description": "Output resolution"
+      },
+      "duration": {
+        "type": "select",
+        "label": "Duration",
+        "default": "5",
+        "options": [
+          {
+            "value": "4",
+            "label": "4 seconds"
+          },
+          {
+            "value": "5",
+            "label": "5 seconds"
+          },
+          {
+            "value": "6",
+            "label": "6 seconds"
+          },
+          {
+            "value": "7",
+            "label": "7 seconds"
+          },
+          {
+            "value": "8",
+            "label": "8 seconds"
+          },
+          {
+            "value": "9",
+            "label": "9 seconds"
+          },
+          {
+            "value": "10",
+            "label": "10 seconds"
+          },
+          {
+            "value": "11",
+            "label": "11 seconds"
+          },
+          {
+            "value": "12",
+            "label": "12 seconds"
+          }
+        ],
+        "description": "4 to 12 seconds"
+      },
+      "aspect_ratio": {
+        "type": "select",
+        "label": "Aspect Ratio",
+        "default": "16:9",
+        "options": [
+          {
+            "value": "16:9",
+            "label": "Landscape (16:9)"
+          },
+          {
+            "value": "9:16",
+            "label": "Portrait (9:16)"
+          },
+          {
+            "value": "1:1",
+            "label": "Square (1:1)"
+          },
+          {
+            "value": "3:4",
+            "label": "Portrait Classic (3:4)"
+          },
+          {
+            "value": "4:3",
+            "label": "Classic (4:3)"
+          },
+          {
+            "value": "21:9",
+            "label": "Ultra-wide (21:9)"
+          }
+        ],
+        "description": "Target video aspect ratio"
+      },
+      "generateAudio": {
+        "type": "switch",
+        "label": "Generate Audio",
+        "description": "Enable synchronized soundtrack",
+        "default": true
+      },
+      "camera_fixed": {
+        "type": "switch",
+        "label": "Fixed Camera",
+        "description": "Prevent automatic camera motion",
+        "default": false
+      }
+    },
+    "defaults": {
+      "resolution": "720p",
+      "duration": "5",
+      "aspect_ratio": "16:9",
+      "generateAudio": true,
+      "camera_fixed": false
+    }
+  },
+  "pricing": {
+    "currency": "USD",
+    "pricing_formula": {
+      "currency": "USD",
+      "with_audio_per_second_by_resolution": {
+        "720p": 0.04,
+        "1080p": 0.06
+      },
+      "without_audio_per_second_by_resolution": {
+        "720p": 0.02,
+        "1080p": 0.03
+      },
+      "default_duration": 5,
+      "default_resolution": "720p"
+    },
+    "current_request_pricing": {
+      "requested_settings": {
+        "prompt": "",
+        "model": "bytedance-seedance-v1.5-pro-fast",
+        "showExplicitContent": false,
+        "wan27_has_video_input": false,
+        "wan27_has_reference_images": false,
+        "voice": "af_bella",
+        "resolution": "720p",
+        "duration": "5",
+        "aspect_ratio": "16:9",
+        "generateAudio": true,
+        "camera_fixed": false
+      },
+      "normalized_pricing_settings": {
+        "resolution": "720p",
+        "duration": 5,
+        "generateAudio": true
+      },
+      "price_usd": 0.2,
+      "notes": [
+        "Requested duration=\"5\" is normalized to 5 for pricing."
+      ]
+    },
+    "pricing_entries": [
+      {
+        "label": "resolution=720p, duration=4s, audio=on",
+        "requested_settings": {
+          "resolution": "720p",
+          "duration": "4",
+          "generateAudio": true
+        },
+        "normalized_pricing_settings": {
+          "resolution": "720p",
+          "duration": 4,
+          "generateAudio": true
+        },
+        "price_usd": 0.16,
+        "notes": [
+          "Requested duration=\"4\" is normalized to 4 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=720p, duration=4s, audio=off",
+        "requested_settings": {
+          "resolution": "720p",
+          "duration": "4",
+          "generateAudio": false
+        },
+        "normalized_pricing_settings": {
+          "resolution": "720p",
+          "duration": 4,
+          "generateAudio": false
+        },
+        "price_usd": 0.08,
+        "notes": [
+          "Requested duration=\"4\" is normalized to 4 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=720p, duration=5s, audio=on",
+        "requested_settings": {
+          "resolution": "720p",
+          "duration": "5",
+          "generateAudio": true
+        },
+        "normalized_pricing_settings": {
+          "resolution": "720p",
+          "duration": 5,
+          "generateAudio": true
+        },
+        "price_usd": 0.2,
+        "notes": [
+          "Requested duration=\"5\" is normalized to 5 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=720p, duration=5s, audio=off",
+        "requested_settings": {
+          "resolution": "720p",
+          "duration": "5",
+          "generateAudio": false
+        },
+        "normalized_pricing_settings": {
+          "resolution": "720p",
+          "duration": 5,
+          "generateAudio": false
+        },
+        "price_usd": 0.1,
+        "notes": [
+          "Requested duration=\"5\" is normalized to 5 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=720p, duration=6s, audio=on",
+        "requested_settings": {
+          "resolution": "720p",
+          "duration": "6",
+          "generateAudio": true
+        },
+        "normalized_pricing_settings": {
+          "resolution": "720p",
+          "duration": 6,
+          "generateAudio": true
+        },
+        "price_usd": 0.24,
+        "notes": [
+          "Requested duration=\"6\" is normalized to 6 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=720p, duration=6s, audio=off",
+        "requested_settings": {
+          "resolution": "720p",
+          "duration": "6",
+          "generateAudio": false
+        },
+        "normalized_pricing_settings": {
+          "resolution": "720p",
+          "duration": 6,
+          "generateAudio": false
+        },
+        "price_usd": 0.12,
+        "notes": [
+          "Requested duration=\"6\" is normalized to 6 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=720p, duration=7s, audio=on",
+        "requested_settings": {
+          "resolution": "720p",
+          "duration": "7",
+          "generateAudio": true
+        },
+        "normalized_pricing_settings": {
+          "resolution": "720p",
+          "duration": 7,
+          "generateAudio": true
+        },
+        "price_usd": 0.28,
+        "notes": [
+          "Requested duration=\"7\" is normalized to 7 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=720p, duration=7s, audio=off",
+        "requested_settings": {
+          "resolution": "720p",
+          "duration": "7",
+          "generateAudio": false
+        },
+        "normalized_pricing_settings": {
+          "resolution": "720p",
+          "duration": 7,
+          "generateAudio": false
+        },
+        "price_usd": 0.14,
+        "notes": [
+          "Requested duration=\"7\" is normalized to 7 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=720p, duration=8s, audio=on",
+        "requested_settings": {
+          "resolution": "720p",
+          "duration": "8",
+          "generateAudio": true
+        },
+        "normalized_pricing_settings": {
+          "resolution": "720p",
+          "duration": 8,
+          "generateAudio": true
+        },
+        "price_usd": 0.32,
+        "notes": [
+          "Requested duration=\"8\" is normalized to 8 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=720p, duration=8s, audio=off",
+        "requested_settings": {
+          "resolution": "720p",
+          "duration": "8",
+          "generateAudio": false
+        },
+        "normalized_pricing_settings": {
+          "resolution": "720p",
+          "duration": 8,
+          "generateAudio": false
+        },
+        "price_usd": 0.16,
+        "notes": [
+          "Requested duration=\"8\" is normalized to 8 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=720p, duration=9s, audio=on",
+        "requested_settings": {
+          "resolution": "720p",
+          "duration": "9",
+          "generateAudio": true
+        },
+        "normalized_pricing_settings": {
+          "resolution": "720p",
+          "duration": 9,
+          "generateAudio": true
+        },
+        "price_usd": 0.36,
+        "notes": [
+          "Requested duration=\"9\" is normalized to 9 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=720p, duration=9s, audio=off",
+        "requested_settings": {
+          "resolution": "720p",
+          "duration": "9",
+          "generateAudio": false
+        },
+        "normalized_pricing_settings": {
+          "resolution": "720p",
+          "duration": 9,
+          "generateAudio": false
+        },
+        "price_usd": 0.18,
+        "notes": [
+          "Requested duration=\"9\" is normalized to 9 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=720p, duration=10s, audio=on",
+        "requested_settings": {
+          "resolution": "720p",
+          "duration": "10",
+          "generateAudio": true
+        },
+        "normalized_pricing_settings": {
+          "resolution": "720p",
+          "duration": 10,
+          "generateAudio": true
+        },
+        "price_usd": 0.4,
+        "notes": [
+          "Requested duration=\"10\" is normalized to 10 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=720p, duration=10s, audio=off",
+        "requested_settings": {
+          "resolution": "720p",
+          "duration": "10",
+          "generateAudio": false
+        },
+        "normalized_pricing_settings": {
+          "resolution": "720p",
+          "duration": 10,
+          "generateAudio": false
+        },
+        "price_usd": 0.2,
+        "notes": [
+          "Requested duration=\"10\" is normalized to 10 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=720p, duration=11s, audio=on",
+        "requested_settings": {
+          "resolution": "720p",
+          "duration": "11",
+          "generateAudio": true
+        },
+        "normalized_pricing_settings": {
+          "resolution": "720p",
+          "duration": 11,
+          "generateAudio": true
+        },
+        "price_usd": 0.44,
+        "notes": [
+          "Requested duration=\"11\" is normalized to 11 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=720p, duration=11s, audio=off",
+        "requested_settings": {
+          "resolution": "720p",
+          "duration": "11",
+          "generateAudio": false
+        },
+        "normalized_pricing_settings": {
+          "resolution": "720p",
+          "duration": 11,
+          "generateAudio": false
+        },
+        "price_usd": 0.22,
+        "notes": [
+          "Requested duration=\"11\" is normalized to 11 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=720p, duration=12s, audio=on",
+        "requested_settings": {
+          "resolution": "720p",
+          "duration": "12",
+          "generateAudio": true
+        },
+        "normalized_pricing_settings": {
+          "resolution": "720p",
+          "duration": 12,
+          "generateAudio": true
+        },
+        "price_usd": 0.48,
+        "notes": [
+          "Requested duration=\"12\" is normalized to 12 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=720p, duration=12s, audio=off",
+        "requested_settings": {
+          "resolution": "720p",
+          "duration": "12",
+          "generateAudio": false
+        },
+        "normalized_pricing_settings": {
+          "resolution": "720p",
+          "duration": 12,
+          "generateAudio": false
+        },
+        "price_usd": 0.24,
+        "notes": [
+          "Requested duration=\"12\" is normalized to 12 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=1080p, duration=4s, audio=on",
+        "requested_settings": {
+          "resolution": "1080p",
+          "duration": "4",
+          "generateAudio": true
+        },
+        "normalized_pricing_settings": {
+          "resolution": "1080p",
+          "duration": 4,
+          "generateAudio": true
+        },
+        "price_usd": 0.24,
+        "notes": [
+          "Requested duration=\"4\" is normalized to 4 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=1080p, duration=4s, audio=off",
+        "requested_settings": {
+          "resolution": "1080p",
+          "duration": "4",
+          "generateAudio": false
+        },
+        "normalized_pricing_settings": {
+          "resolution": "1080p",
+          "duration": 4,
+          "generateAudio": false
+        },
+        "price_usd": 0.12,
+        "notes": [
+          "Requested duration=\"4\" is normalized to 4 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=1080p, duration=5s, audio=on",
+        "requested_settings": {
+          "resolution": "1080p",
+          "duration": "5",
+          "generateAudio": true
+        },
+        "normalized_pricing_settings": {
+          "resolution": "1080p",
+          "duration": 5,
+          "generateAudio": true
+        },
+        "price_usd": 0.3,
+        "notes": [
+          "Requested duration=\"5\" is normalized to 5 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=1080p, duration=5s, audio=off",
+        "requested_settings": {
+          "resolution": "1080p",
+          "duration": "5",
+          "generateAudio": false
+        },
+        "normalized_pricing_settings": {
+          "resolution": "1080p",
+          "duration": 5,
+          "generateAudio": false
+        },
+        "price_usd": 0.15,
+        "notes": [
+          "Requested duration=\"5\" is normalized to 5 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=1080p, duration=6s, audio=on",
+        "requested_settings": {
+          "resolution": "1080p",
+          "duration": "6",
+          "generateAudio": true
+        },
+        "normalized_pricing_settings": {
+          "resolution": "1080p",
+          "duration": 6,
+          "generateAudio": true
+        },
+        "price_usd": 0.36,
+        "notes": [
+          "Requested duration=\"6\" is normalized to 6 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=1080p, duration=6s, audio=off",
+        "requested_settings": {
+          "resolution": "1080p",
+          "duration": "6",
+          "generateAudio": false
+        },
+        "normalized_pricing_settings": {
+          "resolution": "1080p",
+          "duration": 6,
+          "generateAudio": false
+        },
+        "price_usd": 0.18,
+        "notes": [
+          "Requested duration=\"6\" is normalized to 6 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=1080p, duration=7s, audio=on",
+        "requested_settings": {
+          "resolution": "1080p",
+          "duration": "7",
+          "generateAudio": true
+        },
+        "normalized_pricing_settings": {
+          "resolution": "1080p",
+          "duration": 7,
+          "generateAudio": true
+        },
+        "price_usd": 0.42,
+        "notes": [
+          "Requested duration=\"7\" is normalized to 7 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=1080p, duration=7s, audio=off",
+        "requested_settings": {
+          "resolution": "1080p",
+          "duration": "7",
+          "generateAudio": false
+        },
+        "normalized_pricing_settings": {
+          "resolution": "1080p",
+          "duration": 7,
+          "generateAudio": false
+        },
+        "price_usd": 0.21,
+        "notes": [
+          "Requested duration=\"7\" is normalized to 7 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=1080p, duration=8s, audio=on",
+        "requested_settings": {
+          "resolution": "1080p",
+          "duration": "8",
+          "generateAudio": true
+        },
+        "normalized_pricing_settings": {
+          "resolution": "1080p",
+          "duration": 8,
+          "generateAudio": true
+        },
+        "price_usd": 0.48,
+        "notes": [
+          "Requested duration=\"8\" is normalized to 8 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=1080p, duration=8s, audio=off",
+        "requested_settings": {
+          "resolution": "1080p",
+          "duration": "8",
+          "generateAudio": false
+        },
+        "normalized_pricing_settings": {
+          "resolution": "1080p",
+          "duration": 8,
+          "generateAudio": false
+        },
+        "price_usd": 0.24,
+        "notes": [
+          "Requested duration=\"8\" is normalized to 8 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=1080p, duration=9s, audio=on",
+        "requested_settings": {
+          "resolution": "1080p",
+          "duration": "9",
+          "generateAudio": true
+        },
+        "normalized_pricing_settings": {
+          "resolution": "1080p",
+          "duration": 9,
+          "generateAudio": true
+        },
+        "price_usd": 0.54,
+        "notes": [
+          "Requested duration=\"9\" is normalized to 9 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=1080p, duration=9s, audio=off",
+        "requested_settings": {
+          "resolution": "1080p",
+          "duration": "9",
+          "generateAudio": false
+        },
+        "normalized_pricing_settings": {
+          "resolution": "1080p",
+          "duration": 9,
+          "generateAudio": false
+        },
+        "price_usd": 0.27,
+        "notes": [
+          "Requested duration=\"9\" is normalized to 9 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=1080p, duration=10s, audio=on",
+        "requested_settings": {
+          "resolution": "1080p",
+          "duration": "10",
+          "generateAudio": true
+        },
+        "normalized_pricing_settings": {
+          "resolution": "1080p",
+          "duration": 10,
+          "generateAudio": true
+        },
+        "price_usd": 0.6,
+        "notes": [
+          "Requested duration=\"10\" is normalized to 10 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=1080p, duration=10s, audio=off",
+        "requested_settings": {
+          "resolution": "1080p",
+          "duration": "10",
+          "generateAudio": false
+        },
+        "normalized_pricing_settings": {
+          "resolution": "1080p",
+          "duration": 10,
+          "generateAudio": false
+        },
+        "price_usd": 0.3,
+        "notes": [
+          "Requested duration=\"10\" is normalized to 10 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=1080p, duration=11s, audio=on",
+        "requested_settings": {
+          "resolution": "1080p",
+          "duration": "11",
+          "generateAudio": true
+        },
+        "normalized_pricing_settings": {
+          "resolution": "1080p",
+          "duration": 11,
+          "generateAudio": true
+        },
+        "price_usd": 0.66,
+        "notes": [
+          "Requested duration=\"11\" is normalized to 11 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=1080p, duration=11s, audio=off",
+        "requested_settings": {
+          "resolution": "1080p",
+          "duration": "11",
+          "generateAudio": false
+        },
+        "normalized_pricing_settings": {
+          "resolution": "1080p",
+          "duration": 11,
+          "generateAudio": false
+        },
+        "price_usd": 0.33,
+        "notes": [
+          "Requested duration=\"11\" is normalized to 11 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=1080p, duration=12s, audio=on",
+        "requested_settings": {
+          "resolution": "1080p",
+          "duration": "12",
+          "generateAudio": true
+        },
+        "normalized_pricing_settings": {
+          "resolution": "1080p",
+          "duration": 12,
+          "generateAudio": true
+        },
+        "price_usd": 0.72,
+        "notes": [
+          "Requested duration=\"12\" is normalized to 12 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=1080p, duration=12s, audio=off",
+        "requested_settings": {
+          "resolution": "1080p",
+          "duration": "12",
+          "generateAudio": false
+        },
+        "normalized_pricing_settings": {
+          "resolution": "1080p",
+          "duration": 12,
+          "generateAudio": false
+        },
+        "price_usd": 0.36,
+        "notes": [
+          "Requested duration=\"12\" is normalized to 12 for pricing."
+        ]
+      }
+    ],
+    "notes": []
+  }
+},
+{
+  "schema_version": "media-integration-spec/v2",
+  "generated_at": "2026-04-17T04:20:56.555Z",
+  "media_mode": "video",
+  "endpoint": {
+    "method": "POST",
+    "path": "/api/generate-video",
+    "absolute_url": "https://nano-gpt.com/api/generate-video"
+  },
+  "authentication": {
+    "header": "x-api-key"
+  },
+  "request_transport": {
+    "content_type": "application/json"
+  },
+  "request_example": {
+    "headers": {
+      "Content-Type": "application/json",
+      "x-api-key": "YOUR_API_KEY"
+    },
+    "body": {
+      "prompt": "",
+      "model": "wan-video-22",
+      "showExplicitContent": false,
+      "wan27_has_video_input": false,
+      "wan27_has_reference_images": false,
+      "voice": "af_bella",
+      "resolution": "720p",
+      "orientation": "landscape",
+      "duration": "5"
+    }
+  },
+  "request_rules": [
+    "Send JSON to the video generation endpoint using the example body below.",
+    "Pricing is based on normalized settings from the server-side pricing helper, not only on raw request fields."
+  ],
+  "model": {
+    "id": "wan-video-22",
+    "name": "Wan 2.2 14b",
+    "media_type": "video",
+    "provider": "wan",
+    "description": "Wan 2.2 14b is the full version of Wan 2.2 video model that generates high-quality videos with high visual quality and motion diversity from text prompts or images.",
+    "capabilities": {
+      "supports_image_to_video": true,
+      "supports_reference_to_video": false,
+      "supports_last_image": true,
+      "supports_optional_video_input": false,
+      "supports_fps": false,
+      "nsfw": true
+    }
+  },
+  "supported_parameters": {
+    "parameters": {
+      "resolution": {
+        "type": "select",
+        "label": "Resolution",
+        "default": "720p",
+        "options": [
+          {
+            "value": "480p",
+            "label": "480p"
+          },
+          {
+            "value": "720p",
+            "label": "720p"
+          }
+        ],
+        "description": "Video resolution"
+      },
+      "orientation": {
+        "type": "select",
+        "label": "Orientation (T2V only)",
+        "default": "landscape",
+        "options": [
+          {
+            "value": "landscape",
+            "label": "Landscape"
+          },
+          {
+            "value": "portrait",
+            "label": "Portrait"
+          }
+        ],
+        "description": "Select landscape or portrait for text-to-video. Ignored for image-to-video."
+      },
+      "duration": {
+        "type": "select",
+        "label": "Duration",
+        "default": "5",
+        "options": [
+          {
+            "value": "5",
+            "label": "5 seconds"
+          },
+          {
+            "value": "8",
+            "label": "8 seconds"
+          }
+        ],
+        "description": "Length of the generated video"
+      }
+    },
+    "defaults": {
+      "resolution": "720p",
+      "orientation": "landscape",
+      "duration": "5"
+    }
+  },
+  "pricing": {
+    "currency": "USD",
+    "pricing_formula": {
+      "currency": "USD",
+      "per_second_by_resolution": {
+        "480p": 0.04,
+        "720p": 0.08
+      },
+      "default_duration": 5,
+      "default_resolution": "720p"
+    },
+    "current_request_pricing": {
+      "requested_settings": {
+        "prompt": "",
+        "model": "wan-video-22",
+        "showExplicitContent": false,
+        "wan27_has_video_input": false,
+        "wan27_has_reference_images": false,
+        "voice": "af_bella",
+        "resolution": "720p",
+        "orientation": "landscape",
+        "duration": "5"
+      },
+      "normalized_pricing_settings": {
+        "resolution": "720p",
+        "duration": 5
+      },
+      "price_usd": 0.4,
+      "notes": [
+        "Requested duration=\"5\" is normalized to 5 for pricing."
+      ]
+    },
+    "pricing_entries": [
+      {
+        "label": "resolution=480p, duration=5s",
+        "requested_settings": {
+          "resolution": "480p",
+          "duration": "5"
+        },
+        "normalized_pricing_settings": {
+          "resolution": "480p",
+          "duration": 5
+        },
+        "price_usd": 0.2,
+        "notes": [
+          "Requested duration=\"5\" is normalized to 5 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=480p, duration=8s",
+        "requested_settings": {
+          "resolution": "480p",
+          "duration": "8"
+        },
+        "normalized_pricing_settings": {
+          "resolution": "480p",
+          "duration": 8
+        },
+        "price_usd": 0.32,
+        "notes": [
+          "Requested duration=\"8\" is normalized to 8 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=720p, duration=5s",
+        "requested_settings": {
+          "resolution": "720p",
+          "duration": "5"
+        },
+        "normalized_pricing_settings": {
+          "resolution": "720p",
+          "duration": 5
+        },
+        "price_usd": 0.4,
+        "notes": [
+          "Requested duration=\"5\" is normalized to 5 for pricing."
+        ]
+      },
+      {
+        "label": "resolution=720p, duration=8s",
+        "requested_settings": {
+          "resolution": "720p",
+          "duration": "8"
+        },
+        "normalized_pricing_settings": {
+          "resolution": "720p",
+          "duration": 8
+        },
+        "price_usd": 0.64,
+        "notes": [
+          "Requested duration=\"8\" is normalized to 8 for pricing."
+        ]
+      }
+    ],
+    "notes": []
+  }
+},{
+  "schema_version": "media-integration-spec/v2",
+  "generated_at": "2026-04-17T04:21:40.630Z",
+  "media_mode": "video",
+  "endpoint": {
+    "method": "POST",
+    "path": "/api/generate-video",
+    "absolute_url": "https://nano-gpt.com/api/generate-video"
+  },
+  "authentication": {
+    "header": "x-api-key"
+  },
+  "request_transport": {
+    "content_type": "application/json"
+  },
+  "request_example": {
+    "headers": {
+      "Content-Type": "application/json",
+      "x-api-key": "YOUR_API_KEY"
+    },
+    "body": {
+      "prompt": "",
+      "model": "kling-v30-pro",
+      "showExplicitContent": false,
+      "wan27_has_video_input": false,
+      "wan27_has_reference_images": false,
+      "voice": "af_bella",
+      "duration": "5",
+      "aspect_ratio": "16:9",
+      "cfg_scale": 0.5,
+      "sound": false
+    }
+  },
+  "request_rules": [
+    "Send JSON to the video generation endpoint using the example body below.",
+    "Pricing is based on normalized settings from the server-side pricing helper, not only on raw request fields."
+  ],
+  "model": {
+    "id": "kling-v30-pro",
+    "name": "Kling 3.0 Pro",
+    "media_type": "video",
+    "provider": "kling",
+    "description": "Kling 3.0 Pro delivers top-tier text-to-video and image-to-video generation with smooth motion, cinematic visuals, and strong prompt adherence. Upload an image to switch to image-to-video, with optional native audio. Warning: Kling 3.0 Pro is currently timing out frequently due to high demand.",
+    "capabilities": {
+      "supports_image_to_video": true,
+      "supports_reference_to_video": false,
+      "supports_last_image": true,
+      "supports_optional_video_input": false,
+      "supports_fps": false,
+      "nsfw": true
+    }
+  },
+  "supported_parameters": {
+    "parameters": {
+      "duration": {
+        "type": "select",
+        "label": "Duration",
+        "default": "5",
+        "options": [
+          {
+            "value": "3",
+            "label": "3 seconds"
+          },
+          {
+            "value": "4",
+            "label": "4 seconds"
+          },
+          {
+            "value": "5",
+            "label": "5 seconds"
+          },
+          {
+            "value": "6",
+            "label": "6 seconds"
+          },
+          {
+            "value": "7",
+            "label": "7 seconds"
+          },
+          {
+            "value": "8",
+            "label": "8 seconds"
+          },
+          {
+            "value": "9",
+            "label": "9 seconds"
+          },
+          {
+            "value": "10",
+            "label": "10 seconds"
+          },
+          {
+            "value": "11",
+            "label": "11 seconds"
+          },
+          {
+            "value": "12",
+            "label": "12 seconds"
+          },
+          {
+            "value": "13",
+            "label": "13 seconds"
+          },
+          {
+            "value": "14",
+            "label": "14 seconds"
+          },
+          {
+            "value": "15",
+            "label": "15 seconds"
+          }
+        ],
+        "description": "3 to 15 seconds"
+      },
+      "aspect_ratio": {
+        "type": "select",
+        "label": "Aspect Ratio (T2V)",
+        "default": "16:9",
+        "options": [
+          {
+            "value": "16:9",
+            "label": "Landscape (16:9)"
+          },
+          {
+            "value": "9:16",
+            "label": "Portrait (9:16)"
+          },
+          {
+            "value": "1:1",
+            "label": "Square (1:1)"
+          }
+        ],
+        "description": "Applies to text-to-video"
+      },
+      "sound": {
+        "type": "switch",
+        "label": "Audio",
+        "description": "Generate sound with the video",
+        "default": false
+      },
+      "multi_prompt": {
+        "type": "text",
+        "label": "Multi Prompt (JSON)",
+        "description": "Optional JSON array for the multi_prompt field, useful for multi-shot or complex compositions.",
+        "placeholder": "[{\"prompt\":\"Shot 1\"},{\"prompt\":\"Shot 2\"}]",
+        "default": ""
+      },
+      "element_list": {
+        "type": "text",
+        "label": "Element List (JSON)",
+        "description": "Optional JSON array for the element_list field. Create reusable element IDs with Kling Elements.",
+        "placeholder": "[{\"id\":\"element_1\",\"element_id\":123456789}]",
+        "default": ""
+      },
+      "cfg_scale": {
+        "label": "CFG Scale",
+        "description": "Higher values follow the prompt more strictly",
+        "type": "number",
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "default": 0.5
+      }
+    },
+    "defaults": {
+      "duration": "5",
+      "aspect_ratio": "16:9",
+      "sound": false,
+      "multi_prompt": "",
+      "element_list": "",
+      "cfg_scale": 0.5
+    }
+  },
+  "pricing": {
+    "currency": "USD",
+    "pricing_formula": {
+      "currency": "USD",
+      "per_duration": {
+        "3": 0.336,
+        "4": 0.448,
+        "5": 0.56,
+        "6": 0.672,
+        "7": 0.784,
+        "8": 0.896,
+        "9": 1.008,
+        "10": 1.12,
+        "11": 1.232,
+        "12": 1.344,
+        "13": 1.456,
+        "14": 1.568,
+        "15": 1.68
+      },
+      "unit": "per_video",
+      "audio_multiplier": 1.5
+    },
+    "current_request_pricing": {
+      "requested_settings": {
+        "prompt": "",
+        "model": "kling-v30-pro",
+        "showExplicitContent": false,
+        "wan27_has_video_input": false,
+        "wan27_has_reference_images": false,
+        "voice": "af_bella",
+        "duration": "5",
+        "aspect_ratio": "16:9",
+        "cfg_scale": 0.5,
+        "sound": false
+      },
+      "normalized_pricing_settings": {
+        "duration": "5",
+        "sound": false
+      },
+      "price_usd": 0.56,
+      "notes": []
+    },
+    "pricing_entries": [
+      {
+        "label": "duration=3s, audio=off",
+        "requested_settings": {
+          "duration": "3",
+          "sound": false
+        },
+        "normalized_pricing_settings": {
+          "duration": "3",
+          "sound": false
+        },
+        "price_usd": 0.336
+      },
+      {
+        "label": "duration=3s, audio=on",
+        "requested_settings": {
+          "duration": "3",
+          "sound": true
+        },
+        "normalized_pricing_settings": {
+          "duration": "3",
+          "sound": true
+        },
+        "price_usd": 0.504
+      },
+      {
+        "label": "duration=4s, audio=off",
+        "requested_settings": {
+          "duration": "4",
+          "sound": false
+        },
+        "normalized_pricing_settings": {
+          "duration": "4",
+          "sound": false
+        },
+        "price_usd": 0.448
+      },
+      {
+        "label": "duration=4s, audio=on",
+        "requested_settings": {
+          "duration": "4",
+          "sound": true
+        },
+        "normalized_pricing_settings": {
+          "duration": "4",
+          "sound": true
+        },
+        "price_usd": 0.672
+      },
+      {
+        "label": "duration=5s, audio=off",
+        "requested_settings": {
+          "duration": "5",
+          "sound": false
+        },
+        "normalized_pricing_settings": {
+          "duration": "5",
+          "sound": false
+        },
+        "price_usd": 0.56
+      },
+      {
+        "label": "duration=5s, audio=on",
+        "requested_settings": {
+          "duration": "5",
+          "sound": true
+        },
+        "normalized_pricing_settings": {
+          "duration": "5",
+          "sound": true
+        },
+        "price_usd": 0.84
+      },
+      {
+        "label": "duration=6s, audio=off",
+        "requested_settings": {
+          "duration": "6",
+          "sound": false
+        },
+        "normalized_pricing_settings": {
+          "duration": "6",
+          "sound": false
+        },
+        "price_usd": 0.672
+      },
+      {
+        "label": "duration=6s, audio=on",
+        "requested_settings": {
+          "duration": "6",
+          "sound": true
+        },
+        "normalized_pricing_settings": {
+          "duration": "6",
+          "sound": true
+        },
+        "price_usd": 1.008
+      },
+      {
+        "label": "duration=7s, audio=off",
+        "requested_settings": {
+          "duration": "7",
+          "sound": false
+        },
+        "normalized_pricing_settings": {
+          "duration": "7",
+          "sound": false
+        },
+        "price_usd": 0.784
+      },
+      {
+        "label": "duration=7s, audio=on",
+        "requested_settings": {
+          "duration": "7",
+          "sound": true
+        },
+        "normalized_pricing_settings": {
+          "duration": "7",
+          "sound": true
+        },
+        "price_usd": 1.176
+      },
+      {
+        "label": "duration=8s, audio=off",
+        "requested_settings": {
+          "duration": "8",
+          "sound": false
+        },
+        "normalized_pricing_settings": {
+          "duration": "8",
+          "sound": false
+        },
+        "price_usd": 0.896
+      },
+      {
+        "label": "duration=8s, audio=on",
+        "requested_settings": {
+          "duration": "8",
+          "sound": true
+        },
+        "normalized_pricing_settings": {
+          "duration": "8",
+          "sound": true
+        },
+        "price_usd": 1.344
+      },
+      {
+        "label": "duration=9s, audio=off",
+        "requested_settings": {
+          "duration": "9",
+          "sound": false
+        },
+        "normalized_pricing_settings": {
+          "duration": "9",
+          "sound": false
+        },
+        "price_usd": 1.008
+      },
+      {
+        "label": "duration=9s, audio=on",
+        "requested_settings": {
+          "duration": "9",
+          "sound": true
+        },
+        "normalized_pricing_settings": {
+          "duration": "9",
+          "sound": true
+        },
+        "price_usd": 1.512
+      },
+      {
+        "label": "duration=10s, audio=off",
+        "requested_settings": {
+          "duration": "10",
+          "sound": false
+        },
+        "normalized_pricing_settings": {
+          "duration": "10",
+          "sound": false
+        },
+        "price_usd": 1.12
+      },
+      {
+        "label": "duration=10s, audio=on",
+        "requested_settings": {
+          "duration": "10",
+          "sound": true
+        },
+        "normalized_pricing_settings": {
+          "duration": "10",
+          "sound": true
+        },
+        "price_usd": 1.68
+      },
+      {
+        "label": "duration=11s, audio=off",
+        "requested_settings": {
+          "duration": "11",
+          "sound": false
+        },
+        "normalized_pricing_settings": {
+          "duration": "11",
+          "sound": false
+        },
+        "price_usd": 1.232
+      },
+      {
+        "label": "duration=11s, audio=on",
+        "requested_settings": {
+          "duration": "11",
+          "sound": true
+        },
+        "normalized_pricing_settings": {
+          "duration": "11",
+          "sound": true
+        },
+        "price_usd": 1.848
+      },
+      {
+        "label": "duration=12s, audio=off",
+        "requested_settings": {
+          "duration": "12",
+          "sound": false
+        },
+        "normalized_pricing_settings": {
+          "duration": "12",
+          "sound": false
+        },
+        "price_usd": 1.344
+      },
+      {
+        "label": "duration=12s, audio=on",
+        "requested_settings": {
+          "duration": "12",
+          "sound": true
+        },
+        "normalized_pricing_settings": {
+          "duration": "12",
+          "sound": true
+        },
+        "price_usd": 2.016
+      },
+      {
+        "label": "duration=13s, audio=off",
+        "requested_settings": {
+          "duration": "13",
+          "sound": false
+        },
+        "normalized_pricing_settings": {
+          "duration": "13",
+          "sound": false
+        },
+        "price_usd": 1.456
+      },
+      {
+        "label": "duration=13s, audio=on",
+        "requested_settings": {
+          "duration": "13",
+          "sound": true
+        },
+        "normalized_pricing_settings": {
+          "duration": "13",
+          "sound": true
+        },
+        "price_usd": 2.184
+      },
+      {
+        "label": "duration=14s, audio=off",
+        "requested_settings": {
+          "duration": "14",
+          "sound": false
+        },
+        "normalized_pricing_settings": {
+          "duration": "14",
+          "sound": false
+        },
+        "price_usd": 1.568
+      },
+      {
+        "label": "duration=14s, audio=on",
+        "requested_settings": {
+          "duration": "14",
+          "sound": true
+        },
+        "normalized_pricing_settings": {
+          "duration": "14",
+          "sound": true
+        },
+        "price_usd": 2.352
+      },
+      {
+        "label": "duration=15s, audio=off",
+        "requested_settings": {
+          "duration": "15",
+          "sound": false
+        },
+        "normalized_pricing_settings": {
+          "duration": "15",
+          "sound": false
+        },
+        "price_usd": 1.68
+      },
+      {
+        "label": "duration=15s, audio=on",
+        "requested_settings": {
+          "duration": "15",
+          "sound": true
+        },
+        "normalized_pricing_settings": {
+          "duration": "15",
+          "sound": true
+        },
+        "price_usd": 2.52
+      }
+    ],
+    "notes": []
+  }
+}
+
+]
