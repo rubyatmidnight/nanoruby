@@ -2,8 +2,8 @@
 Unified chat node for NanoGPT - consolidates all provider-specific chat nodes.
 """
 import json
-import requests
-from .utils import load_models, update_models_list as _update_models_list
+from .client import NanoGPTClient, build_chat_payload, extract_chat_result
+from .utils import get_api_key, load_models, update_models_list as _update_models_list
 
 
 # Provider configurations: tokens to filter by and fallback models
@@ -116,6 +116,10 @@ class NanoGPTChat:
                     "max": 8192,
                     "tooltip": "Maximum tokens to generate"
                 }),
+                "reasoning_effort": (["auto", "none", "minimal", "low", "medium", "high", "xhigh"], {
+                    "default": "auto",
+                    "tooltip": "Reasoning effort when supported"
+                }),
             }
         }
 
@@ -125,54 +129,34 @@ class NanoGPTChat:
     CATEGORY = "NanoGPT/Chat"
 
     def chat(self, model, messages, api_key, update_models_list=False, system_prompt="",
-             temperature=0.7, top_p=1.0, max_tokens=1024):
+             temperature=0.7, top_p=1.0, max_tokens=1024, reasoning_effort="auto"):
+        api_key = get_api_key("master", api_key)
+        if not api_key:
+            raise ValueError("API key is required.")
         update_info = None
         if update_models_list:
             try:
-                update_info = _update_models_list(api_key=api_key, detailed=False)
+                update_info = _update_models_list(api_key=api_key, detailed=True)
             except Exception as e:
                 update_info = {"error": str(e)}
 
-        payload = {
-            "model": model,
-            "messages": messages,
-            "temperature": temperature,
-            "top_p": top_p,
-            "max_tokens": max_tokens
-        }
-
-        if system_prompt:
-            payload["system_prompt"] = system_prompt
-
-        headers = {
-            "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/json"
-        }
-
-        try:
-            resp = requests.post(
-                "https://nano-gpt.com/api/v1/chat/completions",
-                json=payload,
-                headers=headers,
-                timeout=120
-            )
-            resp.raise_for_status()
-            res = resp.json()
-
-            reply = res.get("reply") or res.get("choices", [{}])[0].get("text") or ""
-            if update_info is not None:
-                res = dict(res)
-                res["models_update"] = update_info
-            metadata = json.dumps(res)
-
-            return (reply, metadata)
-
-        except requests.exceptions.RequestException as e:
-            error_msg = f"API Error: {str(e)}"
-            meta = {"error": str(e)}
-            if update_info is not None:
-                meta["models_update"] = update_info
-            return (error_msg, json.dumps(meta))
+        payload = build_chat_payload(
+            model,
+            messages,
+            system_prompt=system_prompt,
+            temperature=temperature,
+            top_p=top_p,
+            max_tokens=max_tokens,
+            reasoning_effort=reasoning_effort,
+        )
+        result = NanoGPTClient(api_key).chat(payload)
+        reply, reasoning, usage = extract_chat_result(result)
+        metadata = dict(result)
+        metadata["reasoning"] = reasoning
+        metadata["usage"] = usage
+        if update_info is not None:
+            metadata["models_update"] = update_info
+        return (reply, metadata)
 
 
 # Node registration

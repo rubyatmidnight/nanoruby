@@ -3,8 +3,8 @@ Simplified chat node with easy message handling.
 Takes simple string inputs, handles JSON formatting internally.
 """
 import json
-import requests
-from .utils import load_models, update_models_list as _update_models_list
+from .client import NanoGPTClient, build_chat_payload, extract_chat_result
+from .utils import get_api_key, load_models, update_models_list as _update_models_list
 
 
 def get_all_models():
@@ -48,6 +48,9 @@ class SimpleChat:
                 }),
                 "temperature": ("FLOAT", {"default": 0.7, "min": 0.0, "max": 2.0, "step": 0.05}),
                 "max_tokens": ("INT", {"default": 1024, "min": 1, "max": 8192}),
+                "reasoning_effort": (["auto", "none", "minimal", "low", "medium", "high", "xhigh"], {
+                    "default": "auto"
+                }),
             }
         }
 
@@ -57,11 +60,14 @@ class SimpleChat:
     CATEGORY = "NanoGPT/Chat"
 
     def chat(self, model, user_message, api_key, update_models_list=False, system_prompt="", history=None,
-             temperature=0.7, max_tokens=1024):
+             temperature=0.7, max_tokens=1024, reasoning_effort="auto"):
+        api_key = get_api_key("master", api_key)
+        if not api_key:
+            raise ValueError("API key is required.")
         update_info = None
         if update_models_list:
             try:
-                update_info = _update_models_list(api_key=api_key, detailed=False)
+                update_info = _update_models_list(api_key=api_key, detailed=True)
             except Exception as e:
                 update_info = {"error": str(e)}
 
@@ -93,48 +99,24 @@ class SimpleChat:
         if user_message.strip():
             messages.append({"role": "user", "content": user_message.strip()})
 
-        # Make API call
-        payload = {
-            "model": model,
-            "messages": messages,
-            "temperature": temperature,
-            "max_tokens": max_tokens
-        }
+        payload = build_chat_payload(
+            model,
+            messages,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            reasoning_effort=reasoning_effort,
+        )
+        result = NanoGPTClient(api_key).chat(payload)
+        reply, reasoning, usage = extract_chat_result(result)
+        result = dict(result)
+        result["reasoning"] = reasoning
+        result["usage"] = usage
+        if update_info is not None:
+            result["models_update"] = update_info
 
-        headers = {
-            "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/json"
-        }
-
-        try:
-            resp = requests.post(
-                "https://nano-gpt.com/api/v1/chat/completions",
-                json=payload,
-                headers=headers,
-                timeout=120
-            )
-            resp.raise_for_status()
-            result = resp.json()
-
-            reply = result.get("reply") or result.get("choices", [{}])[0].get("text") or ""
-            if update_info is not None:
-                result = dict(result)
-                result["models_update"] = update_info
-
-            # Update history with the new exchange
-            messages.append({"role": "assistant", "content": reply})
-
-            # Return the updated history (without system prompt for cleaner chaining)
-            history_out = [m for m in messages if m.get("role") != "system"]
-
-            return (reply, history_out, result)
-
-        except requests.exceptions.RequestException as e:
-            error_msg = f"API Error: {str(e)}"
-            meta = {"error": str(e)}
-            if update_info is not None:
-                meta["models_update"] = update_info
-            return (error_msg, [], meta)
+        messages.append({"role": "assistant", "content": reply})
+        history_out = [m for m in messages if m.get("role") != "system"]
+        return (reply, history_out, result)
 
 
 class MessageBuilder:

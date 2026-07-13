@@ -1,6 +1,5 @@
 import json
-import requests
-from .utils import encode_image, get_api_key, get_video_model_profile, get_video_models, nanogpt_video_generate, update_models_list as _update_models_list, validate_video_request
+from .utils import encode_image, get_api_key, get_video_model_profile, get_video_models, nanogpt_video_generate, update_video_models_list, validate_video_request
 
 
 def _clean_text(value):
@@ -111,6 +110,10 @@ class NanogptImageToVideo:
                     "default": False,
                     "help": "Fetch latest models into nodes/models.json."
                 }),
+                "session_id": ("STRING", {
+                    "default": "",
+                    "help": "Video queue session ID."
+                }),
             }
         }
 
@@ -135,6 +138,7 @@ class NanogptImageToVideo:
         seed=-1,
         custom_model="",
         update_models_list=False,
+        session_id="",
     ):
         api_key = get_api_key("video", api_key)
         if not api_key:
@@ -143,7 +147,7 @@ class NanogptImageToVideo:
         update_info = None
         if update_models_list:
             try:
-                update_info = _update_models_list(api_key=api_key, detailed=False)
+                update_info = update_video_models_list(api_key=api_key)
             except Exception as e:
                 update_info = {"error": str(e)}
 
@@ -169,25 +173,25 @@ class NanogptImageToVideo:
             image_base64 = encode_image(image)
             payload["imageDataUrl"] = f"data:image/png;base64,{image_base64}"
 
-        try:
-            result = nanogpt_video_generate(payload, api_key, timeout_s=120)
-            run_id = result.get("runId", "")
-            status = result.get("status", "pending")
-            metadata = json.dumps({
-                "runId": run_id,
-                "status": status,
-                "model": effective_model,
-                "model_profile": model_profile,
-                "payload": payload,
-                "models_update": update_info,
-                "api_response": result,
-            })
-            return (run_id, effective_model, status, metadata)
-        except requests.exceptions.RequestException as e:
-            error_msg = f"API request failed: {str(e)}"
-            if hasattr(e, "response") and e.response is not None:
-                error_msg += f"\nStatus: {e.response.status_code}\n{e.response.text}"
-            raise RuntimeError(error_msg)
+        result = nanogpt_video_generate(payload, api_key, timeout_s=120)
+        run_id = result.get("runId") or result.get("requestId")
+        status = result.get("status", "pending")
+        safe_payload = dict(payload)
+        if "imageDataUrl" in safe_payload:
+            safe_payload["imageDataUrl"] = f"<redacted:{len(safe_payload['imageDataUrl'])} chars>"
+        from .video_queue import append_video_job
+        queue_path = append_video_job(run_id, effective_model, session_id)
+        metadata = json.dumps({
+            "runId": run_id,
+            "status": status,
+            "model": effective_model,
+            "model_profile": model_profile,
+            "payload": safe_payload,
+            "queue_path": str(queue_path),
+            "models_update": update_info,
+            "api_response": result,
+        })
+        return (run_id, effective_model, status, metadata)
 
 
 NODE_CLASS_MAPPINGS = {

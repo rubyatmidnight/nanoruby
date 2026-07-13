@@ -104,15 +104,17 @@ class VideoNodeTests(unittest.TestCase):
         node = NanogptVideoStatus()
         result = node.check_status(
             run_id="",
-            model="wan-video-image-to-video",
             api_key="",
             initial_status=json.dumps({
-                "runId": "vid_2",
-                "status": "COMPLETED",
-                "output": {
-                    "video": {
-                        "url": "https://example.com/video.mp4",
-                    }
+                "requestId": "vid_2",
+                "model": "wan-video-image-to-video",
+                "data": {
+                    "status": "COMPLETED",
+                    "output": {
+                        "video": {
+                            "url": "https://example.com/video.mp4",
+                        }
+                    },
                 },
             }),
         )
@@ -120,6 +122,50 @@ class VideoNodeTests(unittest.TestCase):
         self.assertEqual(result[1], "wan-video-image-to-video")
         self.assertEqual(result[2], "COMPLETED")
         self.assertEqual(result[3], "https://example.com/video.mp4")
+
+    def test_status_polls_unified_endpoint(self):
+        node = NanogptVideoStatus()
+        api_response = {
+            "requestId": "vid_3",
+            "model": "sora-2",
+            "data": {
+                "status": "COMPLETED",
+                "cost": 0.05,
+                "output": {
+                    "video": {
+                        "url": "https://example.com/done.mp4",
+                    }
+                },
+            },
+        }
+        with patch("nodes.video_status.nanogpt_video_status", return_value=api_response) as mock_call:
+            run_id, model, status, video_url, metadata = node.check_status(
+                run_id="vid_3",
+                api_key="test-key",
+            )
+        mock_call.assert_called_once_with("vid_3", "test-key", timeout_s=30)
+        self.assertEqual(run_id, "vid_3")
+        self.assertEqual(model, "sora-2")
+        self.assertEqual(status, "COMPLETED")
+        self.assertEqual(video_url, "https://example.com/done.mp4")
+        self.assertEqual(json.loads(metadata)["cost"], 0.05)
+
+    def test_status_raises_on_failed(self):
+        node = NanogptVideoStatus()
+        api_response = {
+            "requestId": "vid_4",
+            "data": {
+                "status": "FAILED",
+                "error": "internal",
+                "userFriendlyError": "Something went wrong.",
+            },
+        }
+        with patch("nodes.video_status.nanogpt_video_status", return_value=api_response):
+            with self.assertRaisesRegex(RuntimeError, "Something went wrong"):
+                node.check_status(
+                    run_id="vid_4",
+                    api_key="test-key",
+                )
 
 
 if __name__ == "__main__":

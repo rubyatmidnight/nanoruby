@@ -2,6 +2,10 @@
 
 NanoGPT-only custom nodes for ComfyUI.
 
+Set `NANOGPT_API_KEY` for all nodes, or use `NANOGPT_MASTER_API_KEY`,
+`NANOGPT_VIDEO_KEY`, and `NANOGPT_TTS_KEY` for separate credentials. Keys
+entered into widgets may be stored in exported workflows.
+
 This repo now focuses on a small NanoGPT surface:
 
 - chat
@@ -27,7 +31,18 @@ Restart ComfyUI after cloning or updating.
 - `NanoGPTChat`
 - `RubySimpleChat`
 
-Both use NanoGPT chat completions and can refresh `nodes/models.json` from inside the node.
+Both use current NanoGPT chat completions and dynamic text-model discovery.
+Model catalogs are cached beneath ComfyUI's output directory.
+
+### Video sessions
+
+Create a `NanoGPT Video Session` and connect its ID to each generator. Every
+submitted run ID is appended to a dated queue file. `NanoGPT Video Batch
+Status` checks all active jobs once, keeps pending jobs active, and archives
+completed, failed, or canceled jobs.
+
+The ordinary video status node also performs one check per execution. It does
+not block ComfyUI by sleeping while a video is generated.
 
 ### TTS
 

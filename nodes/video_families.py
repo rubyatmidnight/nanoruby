@@ -3,8 +3,6 @@ Per-family NanoGPT video nodes.
 One node per model class with only the options that family supports.
 """
 import json
-import requests
-
 from .utils import encode_image, get_api_key, nanogpt_video_generate
 
 
@@ -19,24 +17,24 @@ SEEDANCE_DURATIONS = [str(s) for s in range(4, 13)]
 SEEDANCE_RESOLUTIONS = ["720p", "1080p"]
 
 
-def _run_video(payload, api_key, *, family):
+def _run_video(payload, api_key, *, family, session_id=""):
     """Shared call + metadata builder."""
-    try:
-        result = nanogpt_video_generate(payload, api_key, timeout_s=120)
-    except requests.exceptions.RequestException as exc:
-        msg = f"API request failed: {exc}"
-        if getattr(exc, "response", None) is not None:
-            msg += f"\nStatus: {exc.response.status_code}\n{exc.response.text}"
-        raise RuntimeError(msg)
-    run_id = result.get("runId", "")
+    result = nanogpt_video_generate(payload, api_key, timeout_s=120)
+    run_id = result.get("runId") or result.get("requestId")
     status = result.get("status", "pending")
     if "cost" in result:
         print(f"API: {family} cost was {result['cost']}, balance now {result.get('remainingBalance')}")
+    safe_request = dict(payload)
+    if "imageDataUrl" in safe_request:
+        safe_request["imageDataUrl"] = f"<redacted:{len(safe_request['imageDataUrl'])} chars>"
+    from .video_queue import append_video_job
+    queue_path = append_video_job(run_id, payload.get("model", ""), session_id)
     metadata = json.dumps({
         "family": family,
         "runId": run_id,
         "status": status,
-        "request": payload,
+        "request": safe_request,
+        "queue_path": str(queue_path),
         "api_response": result,
     })
     return run_id, payload.get("model", ""), status, metadata
@@ -71,6 +69,7 @@ class NanogptSeedance:
                 "image": ("IMAGE",),
                 "api_key": ("STRING", {"default": ""}),
                 "seed": ("INT", {"default": -1, "min": -1, "max": 0xffffffffffffffff}),
+                "session_id": ("STRING", {"default": ""}),
             },
         }
 
@@ -80,7 +79,7 @@ class NanogptSeedance:
     CATEGORY = "NanoGPT/Video"
 
     def generate(self, prompt, variant, resolution, duration, aspect_ratio,
-                 generate_audio, camera_fixed, image=None, api_key="", seed=-1):
+                 generate_audio, camera_fixed, image=None, api_key="", seed=-1, session_id=""):
         key = get_api_key("video", api_key)
         if not key:
             raise ValueError("API key is required.")
@@ -96,7 +95,7 @@ class NanogptSeedance:
         if isinstance(seed, int) and seed >= 0:
             payload["seed"] = seed
         _maybe_attach_image(payload, image)
-        return _run_video(payload, key, family="seedance")
+        return _run_video(payload, key, family="seedance", session_id=session_id)
 
 
 class NanogptWan22:
@@ -121,6 +120,7 @@ class NanogptWan22:
                 "image": ("IMAGE",),
                 "api_key": ("STRING", {"default": ""}),
                 "seed": ("INT", {"default": -1, "min": -1, "max": 0xffffffffffffffff}),
+                "session_id": ("STRING", {"default": ""}),
             },
         }
 
@@ -130,7 +130,7 @@ class NanogptWan22:
     CATEGORY = "NanoGPT/Video"
 
     def generate(self, prompt, resolution, duration, orientation,
-                 image=None, api_key="", seed=-1):
+                 image=None, api_key="", seed=-1, session_id=""):
         key = get_api_key("video", api_key)
         if not key:
             raise ValueError("API key is required.")
@@ -145,7 +145,7 @@ class NanogptWan22:
         if isinstance(seed, int) and seed >= 0:
             payload["seed"] = seed
         _maybe_attach_image(payload, image)
-        return _run_video(payload, key, family="wan-2.2-14b")
+        return _run_video(payload, key, family="wan-2.2-14b", session_id=session_id)
 
 
 NODE_CLASS_MAPPINGS = {
